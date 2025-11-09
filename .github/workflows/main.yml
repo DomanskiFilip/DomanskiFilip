@@ -42,7 +42,7 @@ jobs:
           filename: metrics.svg
           
           # Base content
-          base: header, activity, community, repositories, metadata, introduction
+          base: header, activity, community, metadata, introduction
           
           # Isometric Commit Calendar
           plugin_isocalendar: yes
@@ -51,6 +51,7 @@ jobs:
           # Languages Activity
           plugin_languages: yes
           plugin_languages_threshold: 2%
+          plugin_languages_limit: 10
           
           # Repository Traffic 
           plugin_traffic: yes 
