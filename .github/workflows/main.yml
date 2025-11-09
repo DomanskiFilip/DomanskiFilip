@@ -42,7 +42,7 @@ jobs:
           filename: metrics.svg
 
           # Base content
-         base: header, activity, community, repositories, metadata, introduction
+          base: header, activity, community, repositories, metadata, introduction
           
           # Isometric Commit Calendar (already included, but explicitly set)
           plugin_isocalendar: yes
