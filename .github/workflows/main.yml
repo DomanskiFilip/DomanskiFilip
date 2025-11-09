@@ -7,7 +7,7 @@ on:
 
 # Grant the workflow the minimal read permissions the metrics action needs.
 permissions:
-  contents: read
+  contents: write
   packages: read
   actions: read
 
@@ -42,10 +42,28 @@ jobs:
           filename: metrics.svg
 
           # Base content
-          base: header, activity, community, repositories, metadata
-
+         base: header, activity, community, repositories, metadata, introduction
+          
+          # Isometric Commit Calendar (already included, but explicitly set)
           plugin_isocalendar: yes
           plugin_isocalendar_duration: full-year
+          
+          # Languages Activity (from languages/README.md)
+          plugin_languages: yes
+          plugin_languages_threshold: 2%
+
+          # Repository Traffic (from traffic/README.md)
+          plugin_traffic: yes
+          plugin_traffic_limit: 250
+          
+          # Music Activity and Suggestions (from music/README.md)
+          plugin_music: yes
+          plugin_music_token: ${{ secrets.LASTFM_TOKEN }}
+          
+          # Coding Habits (from habits/README.md)
+          plugin_habits: yes
+          plugin_habits_from: 200 # number of events to fetch
+          plugin_habits_days: 7   # number of days to analyze
 
       - name: Upload metrics artifact
         if: always()
