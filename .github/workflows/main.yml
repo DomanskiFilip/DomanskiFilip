@@ -4,21 +4,52 @@ on:
   schedule:
     - cron: '0 */12 * * *'
   workflow_dispatch:
+
+# Grant the workflow the minimal read permissions the metrics action needs.
 permissions:
-  contents: write
+  contents: read
+  packages: read
+  actions: read
+
 jobs:
   github-metrics:
     runs-on: ubuntu-latest
     steps:
-      - uses: lowlighter/metrics@latest
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Install CLI dependencies (jq, docker)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq docker.io || true
+          # Ensure docker service is running
+          sudo systemctl enable docker || true
+          sudo systemctl start docker || true
+          # Best-effort to allow docker usage without repeated sudo
+          sudo groupadd -f docker || true
+          sudo usermod -aG docker $USER || true
+          echo "docker version:" && docker --version || true
+          echo "jq version:" && jq --version || true
+
+      - name: Run lowlighter/metrics
+        uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_PAT || github.token }}
 
           # Output filename
           filename: metrics.svg
 
           # Base content
           base: header, activity, community, repositories, metadata
-          
+
           plugin_isocalendar: yes
           plugin_isocalendar_duration: full-year
+
+      - name: Upload metrics artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: metrics-output
+          path: metrics.svg
