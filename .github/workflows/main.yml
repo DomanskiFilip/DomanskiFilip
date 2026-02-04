@@ -54,9 +54,9 @@ jobs:
           plugin_languages_threshold: 0%
           plugin_languages_indepth: yes
           plugin_languages_analysis_timeout: 60
-          plugin_languages_categories: programming, data
-          plugin_languages_recent_categories: programming, data
-          plugin_languages_recent_load: 300
+          plugin_languages_categories: markup, programming, data
+          plugin_languages_recent_categories: markup, programming, data
+          plugin_languages_recent_load: 700
           plugin_languages_recent_days: 750
           
           # Add these lines to specify repos:
